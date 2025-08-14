@@ -29,7 +29,8 @@ venv\Scripts\activate
 ```
 pip install flask pandas plotly pymongo numpy werkzeug
 ```
-(IF YOU UPLOADED THE CSV FOR THE PREVIOUS ENHANCEMENT, SKIP STEP 7)
+**(IF YOU UPLOADED THE CSV FOR THE PREVIOUS ENHANCEMENT, SKIP STEP 7)**
+
 7. Run the "csv_to_mongodb" python file to import the csv into MongoDB using the following command:
 ```
 python csv_to_mongodb.py
