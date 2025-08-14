@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS-340 Dashboard - Animal Shelter</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div id="logo-section">
+                <img id="logo" src="static/logo.png" alt="Logo">
+            </div>
+            <h1 class="title">CS-340 Dashboard - Developed by Tanner Meininger</h1>
+            <hr>
+        </div>
+
+        <div class="filter-section">
+            <h3>Filter by Rescue Type</h3>
+            <div class="radio-group">
+                <div class="radio-item">
+                    <input type="radio" id="water-rescue" name="filter-type" value="Water Rescue">
+                    <label for="water-rescue">Water Rescue</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="mountain-rescue" name="filter-type" value="Mountain or Wilderness Rescue">
+                    <label for="mountain-rescue">Mountain or Wilderness Rescue</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="disaster-rescue" name="filter-type" value="Disaster or Individual Tracking">
+                    <label for="disaster-rescue">Disaster or Individual Tracking</label>
+                </div>
+                <div class="radio-item">
+                    <input type="radio" id="reset" name="filter-type" value="All" checked>
+                    <label for="reset">Reset</label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="search-section">
+            <h3>Real-time Search</h3>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by name, breed, or outcome..." autocomplete="off">
+                <div id="search-results-info" class="search-info"></div>
+            </div>
+        </div>
+
+        <div class="navigation-section">
+            <a href="/analytics" class="nav-link">📊 Analytics Dashboard</a>
+            <button id="export-btn" class="export-btn">📥 Export to CSV</button>
+        </div>
+
+        <hr>
+
+        <div class="data-table-container">
+            <h3>Animal Data</h3>
+            <div id="loading" class="loading">Loading data...</div>
+            <div id="error" class="error" style="display: none;"></div>
+            <table id="data-table" class="data-table" style="display: none;">
+                <thead id="table-head">
+                    <!-- Table headers will be populated by JavaScript -->
+                </thead>
+                <tbody id="table-body">
+                    <!-- Table data will be populated by JavaScript -->
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button id="prev-page" onclick="changePage(-1)">Previous</button>
+                <span id="page-info">Page 1 of 1</span>
+                <button id="next-page" onclick="changePage(1)">Next</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="charts-container">
+            <div class="chart-section">
+                <div class="chart-container">
+                    <h3>Distribution of Dog Breeds</h3>
+                    <div id="pie-chart"></div>
+                </div>
+            </div>
+            <div class="chart-section">
+                <div class="map-container">
+                    <h3>Animal Location</h3>
+                    <div id="map-message">Select an animal from the table to view location</div>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = [];
+        let currentPage = 0;
+        const itemsPerPage = 10;
+        let selectedRow = null;
+        let map = null;
+        let marker = null;
+        let searchTimeout;
+        let isSearchMode = false;
+        let originalData = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            setupEventListeners();
+            setupSearchListener();
+            setupExportButton();
+            initializeMap();
+        });
+
+        function setupEventListeners() {
+            // Add event listeners to radio buttons
+            document.querySelectorAll('input[name="filter-type"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Clear search when filter changes
+                    document.getElementById('search-input').value = '';
+                    clearSearch();
+
+                    currentPage = 0;
+                    selectedRow = null;
+                    loadData();
+                });
+            });
+        }
+
+        function initializeMap() {
+            map = L.map('map').setView([30.2672, -97.7431], 10); // Default to Austin, TX
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
+
+        function loadData() {
+            const filterType = document.querySelector('input[name="filter-type"]:checked').value;
+            
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('data-table').style.display = 'none';
+
+            fetch(`/api/data?filter_type=${encodeURIComponent(filterType)}`)
+                .then(response => response.json())
+                .then(data => {
+                    currentData = data;
+                    displayData();
+                    loadChart();
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('data-table').style.display = 'table';
+                })
+                .catch(error => {
+                    console.error('Error loading data:', error);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = 'Error loading data: ' + error.message;
+                });
+        }
+
+        function displayData() {
+            if (currentData.length === 0) {
+                document.getElementById('table-body').innerHTML = '<tr><td colspan="100%">No data available</td></tr>';
+                return;
+            }
+
+            // Create table headers
+            const headers = Object.keys(currentData[0]);
+            const headerRow = document.getElementById('table-head');
+            headerRow.innerHTML = '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+
+            // Calculate pagination
+            const totalPages = Math.ceil(currentData.length / itemsPerPage);
+            const startIndex = currentPage * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, currentData.length);
+            const pageData = currentData.slice(startIndex, endIndex);
+
+            // Create table rows
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            
+            pageData.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.onclick = () => selectRow(startIndex + index);
+                
+                headers.forEach(header => {
+                    const td = document.createElement('td');
+                    td.textContent = row[header] || '';
+                    tr.appendChild(td);
+                });
+                
+                tbody.appendChild(tr);
+            });
+
+            // Update pagination info
+            document.getElementById('page-info').textContent = `Page ${currentPage + 1} of ${totalPages}`;
+            document.getElementById('prev-page').disabled = currentPage === 0;
+            document.getElementById('next-page').disabled = currentPage >= totalPages - 1;
+        }
+
+        function changePage(direction) {
+            const totalPages = Math.ceil(currentData.length / itemsPerPage);
+            const newPage = currentPage + direction;
+            
+            if (newPage >= 0 && newPage < totalPages) {
+                currentPage = newPage;
+                displayData();
+            }
+        }
+
+        function selectRow(globalIndex) {
+            // Remove previous selection
+            document.querySelectorAll('#table-body tr').forEach(tr => tr.classList.remove('selected'));
+            
+            // Add selection to clicked row
+            const localIndex = globalIndex - (currentPage * itemsPerPage);
+            document.querySelectorAll('#table-body tr')[localIndex].classList.add('selected');
+            
+            selectedRow = globalIndex;
+            loadMapData();
+        }
+
+        function loadChart() {
+            // If in search mode, use current filtered data for chart
+            if (isSearchMode && currentData.length > 0) {
+                generateChartFromData(currentData);
+                return;
+            }
+            
+            // Otherwise, use the original API call for filter-based charts
+            const filterType = document.querySelector('input[name="filter-type"]:checked').value;
+            
+            fetch(`/api/chart?filter_type=${encodeURIComponent(filterType)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('pie-chart').innerHTML = '<div class="error">No data available for chart</div>';
+                    } else {
+                        Plotly.newPlot('pie-chart', data.data, data.layout);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading chart:', error);
+                    document.getElementById('pie-chart').innerHTML = '<div class="error">Error loading chart</div>';
+                });
+        }
+
+        function generateChartFromData(data) {
+            if (!data || data.length === 0) {
+                document.getElementById('pie-chart').innerHTML = '<div class="error">No data available for chart</div>';
+                return;
+            }
+            
+            // Count breed occurrences
+            const breedCounts = {};
+            data.forEach(animal => {
+                const breed = animal.breed || 'Unknown';
+                breedCounts[breed] = (breedCounts[breed] || 0) + 1;
+            });
+            
+            // Convert to arrays for Plotly
+            const breeds = Object.keys(breedCounts);
+            const counts = Object.values(breedCounts);
+            
+            if (breeds.length === 0) {
+                document.getElementById('pie-chart').innerHTML = '<div class="error">No breed data available</div>';
+                return;
+            }
+            
+            // Create Plotly pie chart
+            const plotData = [{
+                type: 'pie',
+                labels: breeds,
+                values: counts,
+                hovertemplate: '<b>%{label}</b><br>' +
+                            'Count: %{value}<br>' +
+                            'Percentage: %{percent}<br>' +
+                            '<extra></extra>'
+            }];
+            
+            const layout = {
+                height: 800,
+                font: {size: 18},
+                legend: {
+                    title: "Dog Breeds",
+                    orientation: "v",
+                    yanchor: "middle",
+                    y: 0.5,
+                    xanchor: "left",
+                    x: 1.05,
+                    font: {size: 16}
+                },
+                title: {
+                    text: isSearchMode ? `Breed Distribution (Search Results: ${data.length})` : 'Distribution of Dog Breeds',
+                    font: {size: 20}
+                }
+            };
+            
+            Plotly.newPlot('pie-chart', plotData, layout);
+        }
+
+        function loadMapData() {
+            if (selectedRow === null) return;
+
+            const filterType = document.querySelector('input[name="filter-type"]:checked').value;
+            
+            fetch(`/api/map?row_index=${selectedRow}&filter_type=${encodeURIComponent(filterType)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('map-message').textContent = data.error;
+                        document.getElementById('map-message').style.display = 'block';
+                        if (marker) {
+                            map.removeLayer(marker);
+                            marker = null;
+                        }
+                    } else {
+                        document.getElementById('map-message').style.display = 'none';
+                        
+                        // Remove existing marker
+                        if (marker) {
+                            map.removeLayer(marker);
+                        }
+                        
+                        // Add new marker
+                        marker = L.marker([data.lat, data.lon]).addTo(map);
+                        marker.bindPopup(`<b>Animal Name:</b> ${data.name}<br><b>Breed:</b> ${data.breed}`);
+                        
+                        // Center map on the marker
+                        map.setView([data.lat, data.lon], 12);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading map data:', error);
+                    document.getElementById('map-message').textContent = 'Error loading map data';
+                    document.getElementById('map-message').style.display = 'block';
+                });
+        }
+
+        function setupSearchListener() {
+            const searchInput = document.getElementById('search-input');
+            
+            searchInput.addEventListener('input', function() {
+                const query = this.value.trim();
+                
+                // Clear previous timeout
+                clearTimeout(searchTimeout);
+                
+                // Debounce search - wait 300ms after user stops typing
+                searchTimeout = setTimeout(() => {
+                    if (query.length >= 2) {
+                        performSearch(query);
+                    } else if (query.length === 0) {
+                        clearSearch();
+                    }
+                }, 300);
+            });
+            
+            // Clear search on Escape key
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    this.value = '';
+                    clearSearch();
+                }
+            });
+        }
+
+        function performSearch(query) {
+            document.getElementById('search-results-info').textContent = 'Searching...';
+            
+            fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        document.getElementById('search-results-info').textContent = 'Search error occurred';
+                        return;
+                    }
+                    
+                    // Store original data if not already stored
+                    if (!isSearchMode) {
+                        originalData = [...currentData];
+                    }
+                    
+                    isSearchMode = true;
+                    currentData = data;
+                    currentPage = 0;
+                    selectedRow = null;
+                    
+                    displayData();
+                    loadChart(); // This will use the search results for the chart
+                    
+                    document.getElementById('search-results-info').textContent = 
+                        `Found ${data.length} result${data.length !== 1 ? 's' : ''}`;
+                })
+                .catch(error => {
+                    console.error('Search error:', error);
+                    document.getElementById('search-results-info').textContent = 'Search failed';
+                });
+        }
+
+        function clearSearch() {
+            if (isSearchMode) {
+                currentData = [...originalData];
+                isSearchMode = false;
+                currentPage = 0;
+                selectedRow = null;
+                displayData();
+                loadChart(); // This will revert to the original filter-based chart
+            }
+            document.getElementById('search-results-info').textContent = '';
+        }
+
+        function setupExportButton() {
+            const exportBtn = document.getElementById('export-btn');
+            
+            exportBtn.addEventListener('click', function() {
+                const filterType = document.querySelector('input[name="filter-type"]:checked').value;
+                const searchQuery = document.getElementById('search-input').value.trim();
+                
+                this.disabled = true;
+                this.textContent = '📥 Exporting...';
+                
+                let url = `/api/export/csv?filter_type=${encodeURIComponent(filterType)}`;
+                if (searchQuery) {
+                    url += `&search=${encodeURIComponent(searchQuery)}`;
+                }
+                
+                // Create a temporary link to trigger download
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `animal_shelter_data_${filterType.replace(/\s+/g, '_')}.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    this.disabled = false;
+                    this.textContent = '📥 Export to CSV';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
