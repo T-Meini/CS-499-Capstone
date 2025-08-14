@@ -1,4 +1,6 @@
-Installation and How To Run
+# Installation and How To Run
+
+> **TO RUN THIS YOU WOULD NEED A .ENV FILE, WHICH IS NOT PROVIDED**
 
 1. Ensure that the following are installed on your system (This guide will be only support Windows PCs):
 	- Python 3.8 or later (https://www.python.org/downloads/)
