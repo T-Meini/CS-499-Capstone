@@ -45,7 +45,7 @@ pip install blinker click colorama dnspython Flask itsdangerous Jinja2 MarkupSaf
 ```
 7. You are also provided a .env file that has your unique credentials to access the MongoDB Atlas database (this replaces having the database locally).
    
-Put your .env file into the root "dashboard" folder for the program to work
+	Put your .env file into the root "dashboard" folder for the program to work
 
 8. Run the following command to start the web app:
 ```
