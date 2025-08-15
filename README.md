@@ -32,10 +32,17 @@ In this video, I walk through the original CS-340 dashboard, review the code for
 
 The artifact that was selected was an animal outcomes dashboard originally developed in CS-340: Client/Server Development. The initial version, created as a Jupyter Notebook, used JupyterDash to render visualizations from a MongoDB dataset, showing information like adoption rates and animal types over time. The project has since been enhanced and fully restructured into a standalone Flask web application, using HTML templates, modular backend code, and improved maintainability. The original was created in a past term during my core coursework, and the enhanced version was developed during the current capstone.
 
+![Figure 1: Look of the Original Dashboard](https://github.com/T-Meini/ePortfolio/blob/main/Images/Original%20Dashboard.png)
+>_Figure 1: Look of the original dashboard_
+ ---
+![Figure 2: Remade and Enhanced Flask Dashboard](https://github.com/T-Meini/ePortfolio/blob/main/Images/Enhancement%201.png)
+>_Figure 2: Remade and Enhanced Flask Dashboard_
+
 I selected this artifact because it reflects a complete transformation in the way I approach software design and engineering. The original dashboard functioned well but was embedded in a notebook environment that was difficult to maintain, scale, or deploy. It lacked modularity, proper routing, and a clear separation between data access and presentation logic. The enhanced version, now built in Flask, showcases key software development skills such as modular architecture, template rendering using Jinja2, static asset management, and route control. I reorganized the project into a clean folder structure with app.py managing routing, crud.py handling database logic, and index.html rendering dynamic charts. This separation of concerns improves readability, testability, and makes the dashboard deployable on the web—far beyond what the notebook could support.
 
 For this enhancement, I met the outcomes I initially targeted. Specifically:
 
+- Outcome 1: I showed that there is room for building collaborative environments that enable diverse audiences to support organizational decision making in the field of computer science through maintainability and organization of files
 - Outcome 2: I demonstrated the ability to deliver professional-quality, technically sound visual communications through the redesign of the user interface and web structure.
 - Outcome 4: I applied modern development practices using Flask and MongoDB integration, showcasing innovative tools that deliver real-world value. No changes are needed to the outcome-coverage plan, as this enhancement successfully supports both outcomes through improved application design and deployment readiness.
 
@@ -48,6 +55,9 @@ When reflecting on this project, converting the notebook to a Flask application 
 **[Link to Enhanced File](https://github.com/T-Meini/ePortfolio/tree/main/Algorithms%20%26%20Data%20Structures%20Enhancement)**
 
 Like the previous enhancement, this uses the same artifact which is an interactive dashboard application originally created in CS‑340: Client/Server Development. The original version was a Jupyter Notebook that visualized animal shelter data using static filters and hard-coded queries. In its enhanced form, the dashboard has been converted into a Flask web app and now features a real-time search capability that uses a HashMap (Python dictionary) to efficiently filter animals by name.
+
+![Figure 3: Addition of Hash Search Function to Dashboard with Example Search](https://raw.githubusercontent.com/T-Meini/ePortfolio/24c7e29e0e7bb09c196a9b4ce221f06e2885ca7a/Images/Enhancement%202.png)
+>_Figure 3: Addition of Hash Search Function to Dashboard with Example Search_
 
 I chose this artifact because the enhancement clearly demonstrates my ability to apply efficient data structures in a real-world scenario. The original notebook relied on filtering data directly through MongoDB queries, which was functional but not optimized for performance or responsiveness when handling multiple user interactions. In the enhanced version, I integrated a HashMap to act as a lookup table for animal names and metadata. This change drastically improved the efficiency and responsiveness of the search feature. Instead of querying the database repeatedly, the app now loads animal data into a dictionary on page load and allows for constant-time access while the user types. This demonstrates a practical application of data structure optimization in a user-focused, web-based context.
 
@@ -64,6 +74,12 @@ Through this enhancement, I deepened my understanding of how performance and usa
 **[Link to Enhanced File](https://github.com/T-Meini/ePortfolio/tree/main/Databases%20Enhancement)**
 
 Similarily to the last two, this enhancement also uses the same artifact which is the animal outcomes dashboard project initially created in CS‑340: Client/Server Development. The original version was a Jupyter Notebook that used a local CSV file (aac_shelter_outcomes.csv) and basic data filtering through pandas to display visualizations and perform data analysis. In contrast, the enhanced version, in addition to the conversion to flask and implmentation of the hash map search function, transitions the data layer to a cloud-hosted MongoDB Atlas database, supports dynamic queries via Flask, and incorporates more advanced database features like aggregation pipelines, compound indexing, and search filtering. The enhanced version was developed as part of this capstone to demonstrate improved backend architecture and data operations.
+
+![Figure 4: Addition of Button to Analytics Page and Ability to Export the Data to a CSV](https://github.com/T-Meini/ePortfolio/blob/main/Images/Enhancement%203%20Part%201.png)
+>_Figure 4: Addition of Button to Analytics Page and Ability to Export the Data to a CSV_
+ ---
+![Figure 5: New Analytics Page to Display More Advanced Features](https://github.com/T-Meini/ePortfolio/blob/main/Images/Enhancement%203%20Part%202.png)
+>_Figure 5: New Analytics Page to Display More Advanced Features_
 
 I selected this artifact because it highlights a significant leap in my ability to work with databases in a professional and scalable way. The original dashboard was limited to reading static CSV data with no backend database. All logic for filtering, sorting, and analyzing had to be re-executed every time the notebook ran, and there was no concept of user-specific or real-time interactivity. In the enhanced version, I moved the dataset to MongoDB Atlas, allowing for real-time remote access to structured animal records. I wrote modular code in crud.py to perform robust CRUD operations and implemented advanced MongoDB features like: • Aggregation pipelines to group and analyze data server-side • Compound indexes to improve query efficiency on commonly filtered fields • Environment-based connection configuration for secure cloud access This upgrade transformed the dashboard into a fully functioning database-driven web application, and it showcases my skills in backend integration, NoSQL data modeling, and secure database management.
 
