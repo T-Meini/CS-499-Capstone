@@ -2,7 +2,7 @@
 **CS-499 Capstone by Tanner Meininger**
 
 ## Professional Self-Assessment
-My journey through the Computer Science program has been both transformative and foundational in shaping my skills, professional values, and career goals. The program has given me a strong technical foundation in software engineering, algorithms, databases, and security, while also strengthening my ability to collaborate effectively and communicate clearly in professional settings.
+My journey through the Computer Science program at Southern New Hampshire University has been an amazing opportunity to shape my skills, professional values, and career goals. This program has given me a strong technical foundation in software engineering, algorithms, databases, and security, while also strengthening my ability to collaborate effectively and communicate clearly in professional settings.
 
 Collaboration has been a consistent part of my academic and professional development. For example, in one class project, I worked with a small team to design a web application where each member was responsible for a separate feature. My role was to integrate the database connection layer with the front-end form submissions, which required close coordination with both the database lead and the UI designer to ensure seamless functionality. This experience taught me the importance of clear communication, version control discipline, and adapting my work to fit the needs of the overall project.
 
@@ -16,7 +16,7 @@ My database experience spans from designing schemas and implementing CRUD operat
 
 Security awareness has been integrated into my approach to all aspects of computing. For example, when working with a login form, I made sure to store passwords as hashed values instead of plain text and used environment variables to store sensitive API keys. These steps prevented exposing confidential information in the source code and reduced the risk of security breaches.
 
-Taken together, these skills form the foundation of my professional identity as a computer scientist. The ePortfolio serves as a representation of my technical expertise, problem-solving abilities, and readiness to deliver high-quality, professional software solutions. It reflects my ability to bridge the gap between technical implementation and real-world application, positioning me to contribute effectively in the ever-evolving technology field.
+Taken together, these skills form the foundation of my professional identity as a computer scientist. The ePortfolio serves as a representation of my technical expertise, problem-solving abilities, and readiness to deliver high-quality, professional software solutions. It reflects my ability to bridge the gap between technical implementation and real-world application, allowing me to show how I can contribute effectively in the ever-evolving technology field.
 
 ## Code Review
 
