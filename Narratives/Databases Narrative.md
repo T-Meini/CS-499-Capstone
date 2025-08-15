@@ -16,8 +16,10 @@ This upgrade transformed the dashboard into a fully functioning database-driven 
 ## **Did you meet the course outcomes you planned to meet with this enhancement in Module One? Do you have any updates to your outcome-coverage plans?**
 
 Yes, I met the expected outcomes with this enhancement. It directly supports:
-•	Course Outcome 4: Demonstrate innovative techniques, skills, and tools in computing practices that deliver value and accomplish industry-specific goals.
-•	Course Outcome 5: Develop a security mindset that anticipates exploits in software architecture, ensuring privacy and security of data.
+
+- Course Outcome 4: Demonstrate innovative techniques, skills, and tools in computing practices that deliver value and accomplish industry-specific goals.
+-	Course Outcome 5: Develop a security mindset that anticipates exploits in software architecture, ensuring privacy and security of data.
+
 There are no changes needed to my outcome-coverage plan for this category. The secure integration of MongoDB Atlas and indexing strategies demonstrates both technical skill and data-handling foresight.
 
 ## **Reflect on the process of enhancing and modifying the artifact. What did you learn as you were creating it and improving it? What challenges did you face?**
