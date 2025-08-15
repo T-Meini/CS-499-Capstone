@@ -22,6 +22,12 @@ Taken together, these skills form the foundation of my professional identity as 
 
 📺 **[Watch my Full Code Review Video](https://youtu.be/XOeZaSNp0Yw)**
 
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/XOeZaSNp0Yw" 
+frameborder="0" 
+allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+allowfullscreen></iframe>
+
 In this video, I walk through the original CS-340 dashboard, review the code for each enhancement category, and explain the reasoning and process behind my modifications.
 
 ## Enhancement One - Software Design & Engineering
