@@ -1,9 +1,9 @@
 remote_theme: tuur29/pages-themes-cayman
 title: "Tanner Meininger’s ePortfolio"
 description: "Capstone portfolio showcasing software engineering, algorithmic, and database enhancements"
-show_downloads: true          # shows download buttons for your zip files
-hide_first_title: false       # usually keep false
-darkmode: false               # enable or disable dark mode toggle
+show_downloads: true
+hide_first_title: false
+darkmode: true
 colors:
   gradient_left: "#155799"
   gradient_right: "#159957"
