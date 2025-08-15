@@ -34,7 +34,9 @@ The artifact that was selected was an animal outcomes dashboard originally devel
 
 ![Figure 1: Look of the Original Dashboard](https://raw.githubusercontent.com/T-Meini/ePortfolio/refs/heads/main/Images/Original%20Dashboard.png)
 >_Figure 1: Look of the original dashboard_
- ---
+
+---
+
 ![Figure 2: Remade and Enhanced Flask Dashboard](https://raw.githubusercontent.com/T-Meini/ePortfolio/refs/heads/main/Images/Enhancement%201.png)
 >_Figure 2: Remade and Enhanced Flask Dashboard_
 
@@ -77,7 +79,9 @@ Similarily to the last two, this enhancement also uses the same artifact which i
 
 ![Figure 4: Addition of Button to Analytics Page and Ability to Export the Data to a CSV](https://raw.githubusercontent.com/T-Meini/ePortfolio/refs/heads/main/Images/Enhancement%203%20Part%201.png)
 >_Figure 4: Addition of Button to Analytics Page and Ability to Export the Data to a CSV_
- ---
+ 
+---
+
 ![Figure 5: New Analytics Page to Display More Advanced Features](https://raw.githubusercontent.com/T-Meini/ePortfolio/refs/heads/main/Images/Enhancement%203%20Part%202.png)
 >_Figure 5: New Analytics Page to Display More Advanced Features_
 
