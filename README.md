@@ -88,8 +88,8 @@ Similarily to the last two, this enhancement also uses the same artifact which i
  
 ---
 
-![Figure 5: New Analytics Page to Display More Advanced Features](https://raw.githubusercontent.com/T-Meini/ePortfolio/refs/heads/main/Images/Enhancement%203%20Part%202.png)
->_Figure 5: New Analytics Page to Display More Advanced Features_
+![Figure 5: New Analytics Page to Display More Advanced Aggregations](https://raw.githubusercontent.com/T-Meini/ePortfolio/refs/heads/main/Images/Enhancement%203%20Part%202.png)
+>_Figure 5: New Analytics Page to Display More Advanced Aggregations_
 
 I selected this artifact because it highlights a significant leap in my ability to work with databases in a professional and scalable way. The original dashboard was limited to reading static CSV data with no backend database. All logic for filtering, sorting, and analyzing had to be re-executed every time the notebook ran, and there was no concept of user-specific or real-time interactivity. In the enhanced version, I moved the dataset to MongoDB Atlas, allowing for real-time remote access to structured animal records. I wrote modular code in crud.py to perform robust CRUD operations and implemented advanced MongoDB features like: • Aggregation pipelines to group and analyze data server-side • Compound indexes to improve query efficiency on commonly filtered fields • Environment-based connection configuration for secure cloud access This upgrade transformed the dashboard into a fully functioning database-driven web application, and it showcases my skills in backend integration, NoSQL data modeling, and secure database management.
 
