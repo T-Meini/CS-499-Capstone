@@ -40,3 +40,5 @@ python app.py
 9. Once you confirm that it is running in the command prompt, navigate to the following address to see the page:
 
 	http://127.0.0.1:5000/
+
+10. Follow along with the **[Postman CRUD Guide](https://github.com/T-Meini/ePortfolio/blob/main/Software%20Engineering%20%26%20Design%20Enhancement/Postman%20CRUD%20Guide.pdf)** to know how to use the CRUD functionality with the program
